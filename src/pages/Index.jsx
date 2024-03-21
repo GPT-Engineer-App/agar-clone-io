@@ -12,23 +12,32 @@ const Index = () => {
   const [playerName, setPlayerName] = useState("");
   const worldRef = useRef(null);
 
+  const [mouseAngle, setMouseAngle] = useState(0);
+
   useEffect(() => {
     generateFood();
     const handleMouseMove = (e) => {
       const worldRect = worldRef.current.getBoundingClientRect();
       const mouseX = e.clientX - worldRect.left;
       const mouseY = e.clientY - worldRect.top;
-      const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-      const speed = 5;
-      setPlayer((prev) => ({
-        ...prev,
-        x: prev.x + Math.cos(angle) * speed,
-        y: prev.y + Math.sin(angle) * speed,
-      }));
+      setMouseAngle(Math.atan2(mouseY - player.y, mouseX - player.x));
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [player]);
+
+  useEffect(() => {
+    const speed = 5;
+    const movePlayer = () => {
+      setPlayer((prev) => ({
+        ...prev,
+        x: prev.x + Math.cos(mouseAngle) * speed,
+        y: prev.y + Math.sin(mouseAngle) * speed,
+      }));
+      requestAnimationFrame(movePlayer);
+    };
+    requestAnimationFrame(movePlayer);
+  }, [mouseAngle]);
 
   useEffect(() => {
     const foodToRemove = food.filter((f) => {
