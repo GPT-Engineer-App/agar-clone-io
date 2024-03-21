@@ -27,7 +27,7 @@ const Index = () => {
   }, [player]);
 
   useEffect(() => {
-    const speed = 5;
+    const speed = 2;
     const movePlayer = () => {
       setPlayer((prev) => ({
         ...prev,
@@ -49,6 +49,8 @@ const Index = () => {
       setPlayer((prev) => ({ ...prev, radius: prev.radius + foodToRemove.length }));
     }
   }, [food, player]);
+
+  
 
   const generateFood = () => {
     const newFood = [];
